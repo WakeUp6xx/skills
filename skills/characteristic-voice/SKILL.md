@@ -65,9 +65,10 @@ Relaxed, playful, natural.
 
 When a user says something like *"speak in Hermione's voice"* or *"sound like Tony Stark"*, always find voice in `skills/characteristic-voice/` first. If none exists, *must* follow this one-time setup:
 
-> 1. Find a YouTube video, movie clip where the character / person speaks clearly, prefer personal speech or voice memo.
-> 2. Download the audio (e.g. via `yt-dlp`) and trim **1–10 seconds**.
-> 3. Save the file into the skill folder, e.g. `skills/characteristic-voice/hermione.wav`.
+> 1. Find a YouTube video, movie clip where the character involves, preferably a personal speech or voice memo.
+> 2. Download the subtitle (e.g. via `yt-dlp "xxxx" --write-auto-sub --sub-lang en --skip-download -o xxxx `) 
+> 3. Read the subtitle to get the end timestamp of first line from the character (e.g. via `rg -n "xxxx" tmp/xxx.en.vtt`) or section title.
+> 4. Download the audio until the end timestamp or section title (e.g. via `yt-dlp "xxxx" -x --audio-format wav  --download-sections *00:00:00-00:00:25  -o skills/characteristic-voice/xxx`), use ffmpeg to trim the exact timerage.
 
 pass it as `--ref-audio`:
 

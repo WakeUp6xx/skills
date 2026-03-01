@@ -1,8 +1,8 @@
-# skills
+# Unmute your intelligent bot
 
 English | [简体中文](./README.zh-CN.md)
 
-Central repository for managing Agent Skills.
+Central repository for managing Skills to "human" vibe-talking.
 
 ## Install with `npx skills add`
 
@@ -14,7 +14,7 @@ npx skills add NoizAI/skills --list --full-depth
 npx skills add NoizAI/skills --full-depth --skill tts -y
 
 # Install from GitHub repository
-npx skills add <owner>/<repo>
+npx skills add NoizAI/skills
 
 # Local development (run in this repo directory)
 npx skills add . --list --full-depth

@@ -29,9 +29,6 @@ Options:
   --ref-audio FILE       Reference audio for voice cloning (Noiz)
   --backend BACKEND      Force backend: kokoro | noiz
   --lang LANG            Language code
-  --format FORMAT        wav or mp3 (default: wav)
-  --auto-emotion         Let Noiz auto-detect emotion from text
-  --similarity-enh       Enhance voice similarity (Noiz cloning)
   -h, --help             Show this help
 
 Examples:
@@ -156,56 +153,22 @@ except Exception:
 " 2>/dev/null
 }
 
-noiz_emotion_enhance() {
-  local api_key="$1" text="$2"
-  local resp
-  resp="$(curl -sS -X POST \
-    -H "Authorization: ${api_key}" \
-    -H "Content-Type: application/json" \
-    -d "$(python3 -c "import json; print(json.dumps({'text': $(python3 -c "import json,sys; print(json.dumps(sys.argv[1]))" "$text")}))")" \
-    "${NOIZ_BASE_URL}/emotion-enhance" 2>/dev/null)" || true
-  if [[ -z "$resp" ]]; then
-    echo "$text"
-    return
-  fi
-  local enhanced
-  enhanced="$(echo "$resp" | python3 -c "
-import sys, json
-try:
-    data = json.load(sys.stdin).get('data', {}).get('emotion_enhance', '')
-    if data:
-        print(data)
-    else:
-        sys.exit(1)
-except Exception:
-    sys.exit(1)
-" 2>/dev/null)" || true
-  if [[ -n "$enhanced" ]]; then
-    echo "$enhanced"
-  else
-    echo "$text"
-  fi
-}
-
 noiz_tts() {
-  local api_key="$1" text="$2" voice_id="$3" output="$4" fmt="$5"
-  local speed="$6" emo="$7" lang="$8" ref_audio="$9"
-  shift 9
-  local similarity_enh="$1"
+  local api_key="$1" text="$2" voice_id="$3" output="$4"
+  local speed="$5" emo="$6" lang="$7" ref_audio="$8"
 
   local curl_args=(curl -sS -X POST
     -H "Authorization: ${api_key}"
     -o "$output"
     -w "%{http_code}"
     -F "text=$text"
-    -F "output_format=$fmt"
+    -F "output_format=wav"
     -F "speed=$speed"
   )
 
   [[ -n "$voice_id" ]]       && curl_args+=(-F "voice_id=$voice_id")
   [[ -n "$emo" ]]            && curl_args+=(-F "emo=$emo")
   [[ -n "$lang" ]]           && curl_args+=(-F "target_lang=$lang")
-  [[ "$similarity_enh" == "true" ]] && curl_args+=(-F "similarity_enh=true")
   [[ -n "$ref_audio" ]]      && curl_args+=(-F "file=@$ref_audio")
 
   local status
@@ -222,7 +185,7 @@ noiz_tts() {
 # ── Parse arguments ──────────────────────────────────────────────────
 
 preset="" text="" text_file="" output="" emo="" speed="" voice="" voice_id=""
-backend="" lang="" format="wav" ref_audio="" auto_emotion=false similarity_enh=false
+backend="" lang="" format="wav" ref_audio=""
 
 while [[ $# -gt 0 ]]; do
   case "$1" in
@@ -237,9 +200,6 @@ while [[ $# -gt 0 ]]; do
     --ref-audio)       ref_audio="$2"; shift 2 ;;
     --backend)         backend="$2"; shift 2 ;;
     --lang)            lang="$2"; shift 2 ;;
-    --format)          format="$2"; shift 2 ;;
-    --auto-emotion)    auto_emotion=true; shift ;;
-    --similarity-enh)  similarity_enh=true; shift ;;
     -h|--help)         usage 0 ;;
     *) echo "Unknown option: $1" >&2; usage 1 ;;
   esac
@@ -321,15 +281,7 @@ if [[ -z "$voice_id" && -z "$ref_audio" ]]; then
   echo "[noiz] Using voice_id: $voice_id" >&2
 fi
 
-if $auto_emotion; then
-  echo "[noiz] Enhancing emotion..." >&2
-  text="$(noiz_emotion_enhance "$api_key" "$text")"
-fi
-
-sim_flag="false"
-$similarity_enh && sim_flag="true"
-
-noiz_tts "$api_key" "$text" "$voice_id" "$output" "$format" \
-  "$speed" "$emo" "$lang" "$ref_audio" "$sim_flag"
+noiz_tts "$api_key" "$text" "$voice_id" "$output" \
+  "$speed" "$emo" "$lang" "$ref_audio"
 
 echo "Done. Output: $output" >&2
