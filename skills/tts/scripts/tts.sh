@@ -17,6 +17,7 @@ Examples:
   tts.sh speak -t "Hello" -v af_sarah -o hello.wav
   tts.sh speak -f article.txt -v zf_xiaoni --lang cmn -o out.mp3
   tts.sh speak -t "Hi" --backend noiz --voice-id abc -o hi.wav
+  tts.sh speak -t "Hi" --ref-audio ./my.wav -o clone.wav   # Noiz: own ref audio (path or URL)
   tts.sh render --srt input.srt --voice-map vm.json -o output.wav
   tts.sh to-srt -i article.txt -o article.srt
   tts.sh config --set-api-key YOUR_KEY
@@ -153,7 +154,7 @@ prepare_ref_audio() {
 
 cmd_speak() {
   local text="" text_file="" voice="" voice_id="" output="" format="wav"
-  local lang="" speed="" emo="" backend_flag="" ref_audio=""
+  local lang="" speed="" emo="" duration="" backend_flag="" ref_audio=""
   local auto_emotion=false similarity_enh=false save_voice=false
 
   while [[ $# -gt 0 ]]; do
@@ -167,6 +168,7 @@ cmd_speak() {
       --lang)          lang="$2"; shift 2 ;;
       --speed)         speed="$2"; shift 2 ;;
       --emo)           emo="$2"; shift 2 ;;
+      --duration)      duration="$2"; shift 2 ;;
       --backend)       backend_flag="$2"; shift 2 ;;
       --ref-audio)     ref_audio="$2"; shift 2 ;;
       --auto-emotion)  auto_emotion=true; shift ;;
@@ -249,6 +251,7 @@ cmd_speak() {
     [[ -n "$ref_audio" ]] && cmd+=(--reference-audio "$ref_audio")
     [[ -n "$speed" ]]     && cmd+=(--speed "$speed")
     [[ -n "$emo" ]]       && cmd+=(--emo "$emo")
+    [[ -n "$duration" ]]  && cmd+=(--duration "$duration")
     [[ -n "$lang" ]]      && cmd+=(--target-lang "$lang")
     $auto_emotion         && cmd+=(--auto-emotion)
     $similarity_enh       && cmd+=(--similarity-enh)

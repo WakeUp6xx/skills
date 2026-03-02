@@ -20,7 +20,7 @@ import sys
 import tempfile
 from dataclasses import dataclass
 from pathlib import Path
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 TIMESTAMP_RE = re.compile(r"^(\d{2}):(\d{2}):(\d{2})[,.](\d{3})$")
 
@@ -221,6 +221,23 @@ def _bool_form(v: Any) -> str:
     return "true" if bool(v) else "false"
 
 
+def _resolve_reference_audio(ref: str, timeout: int) -> Tuple[Path, Optional[Path]]:
+    """Resolve reference_audio to a path. If ref is a URL, download to temp file.
+    Returns (path_to_use, temp_path_to_cleanup_or_None)."""
+    if ref.startswith("http://") or ref.startswith("https://"):
+        import requests
+        tmp = tempfile.NamedTemporaryFile(suffix=".wav", delete=False)
+        tmp.close()
+        r = requests.get(ref, timeout=timeout)
+        r.raise_for_status()
+        Path(tmp.name).write_bytes(r.content)
+        return Path(tmp.name), Path(tmp.name)
+    p = Path(ref)
+    if not p.exists():
+        raise FileNotFoundError(f"reference_audio not found: {ref}")
+    return p, None
+
+
 def _noiz_tts(
     base_url: str,
     api_key: str,
@@ -250,13 +267,16 @@ def _noiz_tts(
         payload["emo"] = emo if isinstance(emo, str) else json.dumps(emo)
 
     files = None
+    ref_cleanup: Optional[Path] = None
     ref = cfg.get("reference_audio")
     if ref:
-        ref_path = Path(ref)
-        if not ref_path.exists():
-            raise FileNotFoundError(f"reference_audio not found: {ref}")
+        ref_path, ref_cleanup = _resolve_reference_audio(ref, timeout)
         files = {
-            "file": (ref_path.name, ref_path.open("rb"), "application/octet-stream")
+            "file": (
+                ref_path.name,
+                ref_path.open("rb"),
+                "application/octet-stream",
+            )
         }
     elif not cfg.get("voice_id"):
         raise ValueError(
@@ -271,6 +291,8 @@ def _noiz_tts(
     finally:
         if files and files["file"][1]:
             files["file"][1].close()
+        if ref_cleanup is not None:
+            ref_cleanup.unlink(missing_ok=True)
 
     if resp.status_code != 200:
         raise RuntimeError(

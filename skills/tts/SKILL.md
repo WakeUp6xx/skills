@@ -25,8 +25,13 @@ bash skills/tts/scripts/tts.sh speak -f article.txt -v zf_xiaoni --lang cmn -o o
 # Pick one from the output and re-run with --voice-id <id>.
 bash skills/tts/scripts/tts.sh speak -f input.txt --voice-id voice_abc --auto-emotion --emo '{"Joy":0.5}' -o out.wav
 
+# Noiz: optional --duration (float, seconds, range (0, 36]) for target audio length
+bash skills/tts/scripts/tts.sh speak -t "Short line" --voice-id voice_abc --duration 3.5 -o out.wav
+
 # Voice cloning (Noiz only — no voice-id needed, uses ref audio)
+# Use your own reference audio: local file path or URL (only when using Noiz).
 bash skills/tts/scripts/tts.sh speak -t "Hello" --ref-audio ./ref.wav -o clone.wav
+bash skills/tts/scripts/tts.sh speak -t "Hello" --ref-audio https://example.com/my_voice.wav -o clone.wav
 ```
 
 ## Timeline Mode — SRT to time-aligned audio
@@ -60,7 +65,7 @@ Kokoro voice map:
 }
 ```
 
-Noiz voice map (adds `emo`, `reference_audio` support):
+Noiz voice map (adds `emo`, `reference_audio` support). `reference_audio` can be a local path or a URL (user’s own audio; Noiz only):
 
 ```json
 {

@@ -62,9 +62,12 @@ def synthesize(
     target_lang: Optional[str],
     similarity_enh: bool,
     save_voice: bool,
+    duration: Optional[float],
     timeout: int,
     out_path: Path,
 ) -> float:
+    if duration is not None and not (0 < duration <= 36):
+        raise ValueError("duration must be in range (0, 36] seconds")
     url = f"{base_url.rstrip('/')}/text-to-speech"
     data: Dict[str, str] = {
         "text": text,
@@ -81,6 +84,8 @@ def synthesize(
         data["similarity_enh"] = "true"
     if save_voice:
         data["save_voice"] = "true"
+    if duration is not None:
+        data["duration"] = str(duration)
 
     files = None
     if reference_audio:
@@ -136,6 +141,13 @@ def main() -> int:
     parser.add_argument("--target-lang")
     parser.add_argument("--similarity-enh", action="store_true")
     parser.add_argument("--save-voice", action="store_true")
+    parser.add_argument(
+        "--duration",
+        type=float,
+        default=None,
+        metavar="SEC",
+        help="Target audio duration in seconds (0, 36], optional",
+    )
     parser.add_argument("--timeout-sec", type=int, default=120)
     args = parser.parse_args()
     args.api_key = normalize_api_key_base64(args.api_key)
@@ -162,7 +174,7 @@ def main() -> int:
             )
 
         ref = Path(args.reference_audio) if args.reference_audio else None
-        duration = synthesize(
+        out_duration = synthesize(
             base_url=args.base_url,
             api_key=args.api_key,
             text=text,
@@ -174,10 +186,11 @@ def main() -> int:
             target_lang=args.target_lang,
             similarity_enh=args.similarity_enh,
             save_voice=args.save_voice,
+            duration=args.duration,
             timeout=args.timeout_sec,
             out_path=Path(args.output),
         )
-        print(f"Done. Output: {args.output} (duration: {duration}s)")
+        print(f"Done. Output: {args.output} (duration: {out_duration}s)")
         return 0
     except Exception as exc:
         print(f"Error: {exc}", file=sys.stderr)
