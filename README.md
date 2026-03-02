@@ -21,12 +21,20 @@ npx skills add NoizAI/skills
 npx skills add . --list --full-depth
 ```
 
+## Highlights
+
+- 🔒 Secure and local-first: run skills on your own machine to keep sensitive text and assets localized.
+- 🧠 Character-style controls: tune fillers, emotion, and speaking presets for companion-like output.
+- 🎙️ Production-ready voice: from quick TTS generation to timeline-aligned rendering.
+
 ## Available skills
 
 | Name | Description | Documentation | Run command |
 |------|-------------|---------------|-------------|
 | tts | Convert text into speech with Kokoro or Noiz, supporting simple mode and timeline-aligned rendering workflows. | [SKILL.md](./skills/tts/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill tts -y` |
 | characteristic-voice | Make generated speech feel companion-like with fillers, emotional tuning, and preset speaking styles. | [SKILL.md](./skills/characteristic-voice/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill characteristic-voice -y` |
+| video-translation | Translate and dub videos from one language to another, replacing the original audio with TTS while keeping the video intact. | [SKILL.md](./skills/video-translation/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill video-translation -y` |
+| template-skill | Reusable template for authoring new Agent Skills with clear triggers, workflow, and I/O contracts. | [SKILL.md](./skills/template-skill/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill template-skill -y` |
 
 ## Quick Verify
 
