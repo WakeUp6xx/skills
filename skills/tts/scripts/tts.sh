@@ -210,7 +210,7 @@ cmd_speak() {
     echo "Error: no TTS backend available." >&2
     echo "" >&2
     echo "  Option A — Noiz (recommended):" >&2
-    echo "    1. Get your API key from https://developers.noiz.ai" >&2
+    echo "    1. Get your API key from https://developers.noiz.ai/api-keys" >&2
     echo "    2. Run: bash skills/tts/scripts/tts.sh config --set-api-key YOUR_KEY" >&2
     echo "" >&2
     echo "  Option B — Kokoro (offline, local):" >&2
@@ -240,7 +240,7 @@ cmd_speak() {
     local downloaded_ref_audio=""
     if [[ -z "$api_key" ]]; then
       echo "Error: NOIZ_API_KEY not configured." >&2
-      echo "  Get your key at https://developers.noiz.ai" >&2
+      echo "  Get your key at https://developers.noiz.ai/api-keys" >&2
       echo "  Then run: bash skills/tts/scripts/tts.sh config --set-api-key YOUR_KEY" >&2
       exit 1
     fi
@@ -335,7 +335,7 @@ cmd_render() {
     echo "Error: no TTS backend available." >&2
     echo "" >&2
     echo "  Option A — Noiz (recommended):" >&2
-    echo "    1. Get your API key from https://developers.noiz.ai" >&2
+    echo "    1. Get your API key from https://developers.noiz.ai/api-keys" >&2
     echo "    2. Run: bash skills/tts/scripts/tts.sh config --set-api-key YOUR_KEY" >&2
     echo "" >&2
     echo "  Option B — Kokoro (offline, local):" >&2
@@ -351,7 +351,7 @@ cmd_render() {
     local api_key="${NOIZ_API_KEY:-}"
     if [[ -z "$api_key" ]]; then
       echo "Error: NOIZ_API_KEY not configured." >&2
-      echo "  Get your key at https://developers.noiz.ai" >&2
+      echo "  Get your key at https://developers.noiz.ai/api-keys" >&2
       echo "  Then run: bash skills/tts/scripts/tts.sh config --set-api-key YOUR_KEY" >&2
       exit 1
     fi
@@ -415,7 +415,7 @@ cmd_config() {
 NOIZ_API_KEY is not configured.
 
 Option A — Noiz (recommended):
-  1. Get your API key from https://developers.noiz.ai
+  1. Get your API key from https://developers.noiz.ai/api-keys
   2. Run:
      bash skills/tts/scripts/tts.sh config --set-api-key YOUR_KEY
   The key will be saved to $NOIZ_KEY_FILE and loaded automatically.

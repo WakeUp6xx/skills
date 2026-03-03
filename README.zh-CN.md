@@ -58,7 +58,7 @@ bash skills/characteristic-voice/scripts/speak.sh \
 
 ## Noiz API Key（推荐）
 
-为获得最佳体验（更快、支持情绪控制、音色克隆），从 [developers.noiz.ai](https://developers.noiz.ai) 获取 API key：
+为获得最佳体验（更快、支持情绪控制、音色克隆），从 [developers.noiz.ai/api-keys](https://developers.noiz.ai/api-keys) 获取 API key：
 
 ```bash
 bash skills/tts/scripts/tts.sh config --set-api-key YOUR_KEY
