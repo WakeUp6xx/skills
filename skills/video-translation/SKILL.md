@@ -83,7 +83,7 @@ When the user asks to translate a video:
 ## Requirements
 
 - **Dependencies (other skills)**  
-  - **youtube-downloader** ([crazynomad/skills](https://github.com/crazynomad/skills)) — [SKILL.md](https://github.com/crazynomad/skills/blob/main/skills/youtube-downloader/SKILL.md)  
+  - **youtube-downloader** ([crazynomad/skills](https://github.com/crazynomad/skills)) — [SKILL.md](https://github.com/crazynomad/skills/blob/master/youtube-downloader/SKILL.md)  
     Install: clone or copy the `skills/youtube-downloader` directory from [crazynomad/skills](https://github.com/crazynomad/skills) into your `skills/` folder so that `skills/youtube-downloader/scripts/download_video.py` is available.
   - **tts** ([NoizAI/skills](https://github.com/NoizAI/skills)) — [SKILL.md](https://github.com/NoizAI/skills/blob/main/skills/tts/SKILL.md)  
     If not already in this repo: clone or copy the `skills/tts` directory from [NoizAI/skills](https://github.com/NoizAI/skills) into your `skills/` folder. Ensure `skills/tts/scripts/tts.sh` and related scripts are present.
