@@ -1,8 +1,8 @@
-# skills
+# 让你的智能体“开口说话”
 
 [English](./README.md) | 简体中文
 
-用于集中管理 Agent Skills 的仓库。
+用于集中管理 Skills 的仓库，专注于打造更"像人"的语音对话体验。
 
 ## 用 `npx skills add` 安装
 
@@ -14,9 +14,9 @@ npx skills add NoizAI/skills --list --full-depth
 npx skills add NoizAI/skills --full-depth --skill tts -y
 
 # 从 GitHub 仓库安装
-npx skills add <owner>/<repo>
+npx skills add NoizAI/skills
 
-# 本地开发调试（在仓库目录执行）
+# 本地开发（在当前仓库目录执行）
 npx skills add . --list --full-depth
 ```
 
@@ -31,12 +31,13 @@ npx skills add . --list --full-depth
 | 名称 | 说明 | 文档 | 可运行命令 |
 |------|------|------|------------|
 | tts | 将文本转为语音，支持 Kokoro / Noiz：简单模式、时间轴精确渲染、精确时长控制与参考音频音色克隆。 | [SKILL.md](./skills/tts/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill tts -y` |
-| video-translation | 视频翻译与配音：按字幕时间轴生成 TTS 并替换原音轨，支持按句使用原视频对应时间段的参考音频。 | [SKILL.md](./skills/video-translation/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill video-translation -y` |
-| characteristic-voice | 通过小声音、情绪参数和场景预设，让语音更有陪伴感与人格化表达。 | [SKILL.md](./skills/characteristic-voice/SKILL.zh-CN.md) | `npx skills add NoizAI/skills --full-depth --skill characteristic-voice -y` |
-| video-translation | 将视频语音翻译成另一种语言，用 TTS 生成配音并替换原始音轨。 | [SKILL.md](./skills/video-translation/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill video-translation -y` |
-| template-skill | 可复用的技能编写模板，内含触发词、工作流与输入输出约定。 | [SKILL.md](./skills/template-skill/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill template-skill -y` |
+| chat-with-anyone | 用目标人物（真实人物或虚构角色）的声音进行对话：自动在线寻找其语音、提取干净参考样本，并生成语音回复。 | [SKILL.md](./skills/chat-with-anyone/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill chat-with-anyone -y` |
+| characteristic-voice | 通过语气词、情绪参数和场景预设，让生成语音更有陪伴感和人格化表达。 | [SKILL.md](./skills/characteristic-voice/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill characteristic-voice -y` |
+| video-translation | 将视频语音翻译成另一种语言，用 TTS 生成配音并替换原始音轨，同时保留视频画面。 | [SKILL.md](./skills/video-translation/SKILL.md) | `npx skills add NoizAI/skills --full-depth --skill video-translation -y` |
 
 ## 快速验证
+
+例如 characteristic-voice：
 
 ```bash
 bash skills/characteristic-voice/scripts/speak.sh \
@@ -45,26 +46,44 @@ bash skills/characteristic-voice/scripts/speak.sh \
 
 ## 英文音频示例
 
-可直接试听以下示例（转为 MP4 以支持页面内播放）：
+可直接试听以下示例（使用 MP4 以支持页面内播放）：
 
-- 新闻快讯风格  
-  <video src="./examples/audio/demo-breaking-news.mp4" controls></video>
-- 冥想治愈风格  
-  <video src="./examples/audio/demo-mindful-calm.mp4" controls></video>
-- 播客开场风格  
-  <video src="./examples/audio/demo-podcast-intro.mp4" controls></video>
-- 创业激励风格  
-  <video src="./examples/audio/demo-startup-hype.mp4" controls></video>
+- 新闻快讯风格
+
+https://github.com/user-attachments/assets/e1e75371-49e2-4858-9993-428d999c3723
+
+
+
+
+- 冥想治愈风格
+
+https://github.com/user-attachments/assets/d2e6472d-9edf-449d-a5ee-51ad7e19a861
+
+
+
+
+
+- 播客开场风格
+
+https://github.com/user-attachments/assets/e8f78ffa-7f12-4475-b1af-09161b3ee01b
+
+
+
+- 创业激励风格
+
+https://github.com/user-attachments/assets/0d3b8af9-2288-4a63-9246-2748ed232b0e
+
+
 
 ## Noiz API Key（推荐）
 
-为获得最佳体验（更快、支持情绪控制、音色克隆），从 [developers.noiz.ai/api-keys](https://developers.noiz.ai/api-keys) 获取 API key：
+为获得最佳体验（更快、支持情绪控制、音色克隆），请从 [developers.noiz.ai/api-keys](https://developers.noiz.ai/api-keys) 获取 API key：
 
 ```bash
 bash skills/tts/scripts/tts.sh config --set-api-key YOUR_KEY
 ```
 
-Key 会持久化到 `~/.noiz_api_key`，后续自动加载。也可传 `--backend kokoro` 使用本地 Kokoro 后端。
+Key 会持久化到 `~/.noiz_api_key` 并自动加载。也可以传 `--backend kokoro` 使用本地 Kokoro 后端。
 
 ## 贡献说明
 
