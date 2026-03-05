@@ -26,6 +26,7 @@ npx skills add . --list --full-depth
 - 🔒 Secure and local-first: run skills on your own machine to keep sensitive text and assets localized.
 - 🧠 Character-style controls: tune fillers, emotion, and speaking presets for companion-like output.
 - 🎙️ Production-ready voice: from quick TTS generation to timeline-aligned rendering.
+- 📤 One-command delivery to chat platforms: generate speech and send it as a native voice message to Feishu, Telegram, or Discord — zero extra code.
 
 ## Available skills
 
