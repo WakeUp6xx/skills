@@ -101,7 +101,7 @@ For skill authoring rules, directory conventions, and PR guidance, see `CONTRIBU
 
 ### GitHub Star Trend
 
-[![Star History Chart](https://api.star-history.com/svg?repos=NoizAI/skills&type=Date)](https://star-history.com/#NoizAI/skills&Date)
+[![Star History Chart](https://api.star-history.com/image?repos=NoizAI/skills&type=date&legend=top-left)](https://www.star-history.com/?repos=NoizAI%2Fskills&type=date&legend=top-left)
 
 ### Git Clone Trend
 
