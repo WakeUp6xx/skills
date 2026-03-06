@@ -20,14 +20,16 @@ def normalize_api_key_base64(api_key: str) -> str:
     key = api_key.strip()
     if not key:
         return key
+    # If already looks like base64, return as-is
     padded = key + ("=" * (-len(key) % 4))
     try:
         decoded = base64.b64decode(padded, validate=True)
         canonical = base64.b64encode(decoded).decode("ascii").rstrip("=")
         if decoded and canonical == key.rstrip("="):
-            return key
+            return key  # Already base64, use directly
     except binascii.Error:
         pass
+    # Otherwise encode to base64
     return base64.b64encode(key.encode("utf-8")).decode("ascii")
 
 
@@ -121,9 +123,7 @@ def synthesize(
     out_path.parent.mkdir(parents=True, exist_ok=True)
     out_path.write_bytes(resp.content)
     dur = resp.headers.get("X-Audio-Duration")
-    duration_val = float(dur) if dur else -1.0
-    out_path.with_suffix(".duration").write_text(str(duration_val))
-    return duration_val
+    return float(dur) if dur else -1.0
 
 
 def main() -> int:
@@ -136,7 +136,7 @@ def main() -> int:
     parser.add_argument("--reference-audio", help="Local audio for voice cloning")
     parser.add_argument("--output", required=True)
     parser.add_argument("--base-url", default="https://noiz.ai/v1")
-    parser.add_argument("--output-format", choices=["wav", "mp3", "opus"], default="wav")
+    parser.add_argument("--output-format", choices=["wav", "mp3"], default="wav")
     parser.add_argument("--auto-emotion", action="store_true")
     parser.add_argument("--emo", help='Emotion JSON string, e.g. \'{"Joy":0.5}\'')
     parser.add_argument("--speed", type=float, default=1.0)
